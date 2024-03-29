@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/sakha/v2/chat")
 @CrossOrigin(origins = "*")
+@ResponseBody
 public class ChatController {
   @Autowired private ChatService chatService;
   @Autowired private AuthService authService;
@@ -36,7 +37,6 @@ public class ChatController {
       chatResponse = new ChatResponse();
       chatResponse.setMessage(chatRequest.getMessage());
       chatResponse.setSakhaResponse(sakhaChatResponse.getSakhaResponse());
-      // chatResponse;
       chatService.saveChat(chatResponse, chatRequest.getUserId());
       return ResponseEntity.status(HttpStatus.OK).body(chatResponse);
     } else {
