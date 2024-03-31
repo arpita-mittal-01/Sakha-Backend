@@ -2,9 +2,8 @@ package com.sakha.controller;
 
 import com.sakha.client.request.SakhaChatRequest;
 import com.sakha.client.response.SakhaChatResponse;
-import com.sakha.entity.Chat;
-import com.sakha.entity.ChatRequest;
-import com.sakha.entity.ChatResponse;
+import com.sakha.entity.*;
+import com.sakha.repository.FeedbackRepo;
 import com.sakha.service.AuthService;
 import com.sakha.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +49,18 @@ public class ChatController {
     List<Chat> list = chatService.findAllByUserId(userId);
     if (list == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     return ResponseEntity.status(HttpStatus.OK).body(list);
+  }
+
+  @PostMapping("/activity")
+  public ResponseEntity<Message> likeMessage(@RequestBody ChatActivityRequest chatActivityRequest) {
+    Message message = chatService.chatLikeDislike(chatActivityRequest);
+    return ResponseEntity.status(HttpStatus.OK).body(message);
+  }
+
+  @PostMapping("/feedback")
+  public ResponseEntity<FeedBack> feedbackForMessage(@RequestBody FeedbackRequest feedbackRequest) {
+    FeedBack feedback = chatService.saveFeedbackForChat(feedbackRequest);
+    if (feedback == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    return ResponseEntity.status(HttpStatus.OK).body(feedback);
   }
 }
